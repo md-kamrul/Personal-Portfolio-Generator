@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Footer from './Footer';
+import Header from './Header';
+import About from './About';
 
 const Main = () => {
     // --- STATE MANAGEMENT ---
@@ -58,6 +60,12 @@ const Main = () => {
                     </div>
                 </div>
             </div>
+            {/* theme end */}
+
+            <Header theme={theme} />
+
+            <About theme={theme} />
+
             <Footer theme={theme} />
         </div>
     );

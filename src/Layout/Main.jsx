@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Footer from './Footer';
 import Header from './Header';
 import About from './About';
+import InputSection from './InputSection';
+import GenerateIdea from './GenerateIdea';
+import Logo from './Logo';
+import ThemeToggle from './ThemeToggle';
 
 const Main = () => {
     // --- STATE MANAGEMENT ---
@@ -20,52 +24,118 @@ const Main = () => {
         setTheme(theme === 'light' ? 'dark' : 'light');
     };
 
+    // --- Form and API State ---
+    const [showResults, setShowResults] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [generatedIdea, setGeneratedIdea] = useState('');
+
+    // Example form state (expand as needed)
+    const [experience, setExperience] = useState('Beginner');
+    const [skills, setSkills] = useState(['HTML', 'CSS', 'JavaScript']);
+    const [focus, setFocus] = useState('Frontend');
+    const [interests, setInterests] = useState(['Productivity', 'Personal Development']);
+    const [goal, setGoal] = useState('Learn a new skill');
+    const [time, setTime] = useState('1-2 weeks');
+    const [features, setFeatures] = useState('Clean UI, Local Storage');
+    const [avoid, setAvoid] = useState('Complex backend, APIs');
+
+    // Handle form submit and API call
+    const handleGenerateIdea = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+        setGeneratedIdea('');
+        setShowResults(true);
+
+        // Build prompt and call API (replace with your actual API logic)
+        const prompt = `Act as an expert project idea generator for a developer's portfolio. Based on the following details, generate a single, creative, and well-defined project idea.\n\n**Developer Profile:**\n- **Experience Level:** ${experience}\n- **Technical Skills:** ${skills.join(', ')}\n- **Desired Project Focus:** ${focus}\n- **Personal Interests/Domains:** ${interests.join(', ')}\n- **Primary Goal:** ${goal}\n- **Time Commitment:** ${time}\n- **Key Features Wanted:** ${features}\n- **Technologies/Concepts to Avoid:** ${avoid}`;
+
+        try {
+            // Example: Replace with your actual API endpoint and logic
+            const response = await fetch('https://api.example.com/generate-idea', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt }),
+            });
+            const result = await response.json();
+            setGeneratedIdea(result.idea || '');
+        } catch (err) {
+            setError('Sorry, something went wrong. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGoBack = () => {
+        setShowResults(false);
+    };
+
+    // Form options for selects and multiselects
+    const formOptions = {
+        experienceLevels: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
+        projectFocuses: ['Frontend', 'Backend', 'Full-Stack', 'Mobile (React Native)', 'Data Science', 'Game Development'],
+        projectGoals: ['Learn a new skill', 'Build a complex app', 'Showcase design skills', 'Create a commercial product', 'Contribute to open-source'],
+        timeCommitments: ['Weekend project', '1-2 weeks', '1 month+', 'Long-term (3+ months)'],
+        techSkillsOptions: [
+            'HTML', 'CSS', 'JavaScript', 'TypeScript', 'React', 'Vue.js', 'Angular', 'Svelte', 'Tailwind CSS', 'Bootstrap',
+            'Node.js', 'Express.js', 'Python', 'Django', 'Flask', 'Ruby on Rails', 'Java', 'Spring Boot', 'PHP', 'Laravel',
+            'React Native', 'Flutter', 'Swift', 'Kotlin', 'SQL', 'PostgreSQL', 'MySQL', 'MongoDB', 'Firebase',
+            'Git', 'Docker', 'Kubernetes', 'AWS', 'Google Cloud', 'Azure', 'GraphQL', 'REST API', 'WebSockets'
+        ],
+        interestOptions: [
+            'Productivity', 'Personal Development', 'E-commerce', 'Social Media', 'Healthcare',
+            'Finance & FinTech', 'Education & EdTech', 'Gaming', 'Music & Audio', 'Video & Streaming',
+            'Travel & Hospitality', 'Food & Recipe', 'Fitness & Wellness', 'News & Blogging',
+            'Data Visualization', 'Artificial Intelligence', 'Machine Learning', 'Internet of Things (IoT)',
+            'Sustainability & Green Tech'
+        ]
+    };
+
     return (
         <div className={theme === 'dark' ? 'bg-gray-900 text-white min-h-screen flex flex-col' : 'bg-gray-50 text-gray-900 min-h-screen flex flex-col'}>
-            {/* theme start */}
-            <div className=" w-[90%] md:w-[80%] mx-auto flex flex-col px-4">
-                <div className="w-full flex items-center pt-8 pb-4">
-                    <div className=" flex items-center justify-center w-full">
-                        <img src="/logo.png" alt="Logo" className="h-20 w-20 object-center" />
-                    </div>
-                    <div className="flex-1 flex justify-end">
-                        <button
-                            onClick={toggleTheme}
-                            className={
-                                `p-2 rounded-full transition-colors text-gray-800 dark:text-gray-200 ` +
-                                (theme === 'light' ? 'bg-[#e6e7ea] hover:bg-[#dcdcdc]' : 'bg-gray-700 hover:bg-gray-600')
-                            }
-                        >
-                            {theme === 'light'
-                                ? (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="black" />
-                                    </svg>
-                                )
-                                : (
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <circle cx="12" cy="12" r="4" fill="white" />
-                                        <path d="M12 2v2" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                        <path d="M12 20v2" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                        <path d="m4.93 4.93 1.41 1.41" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                        <path d="m17.66 17.66 1.41 1.41" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                        <path d="M2 12h2" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                        <path d="M20 12h2" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                        <path d="m6.34 17.66-1.41 1.41" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                        <path d="m19.07 4.93-1.41 1.41" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                                    </svg>
-                                )
-                            }
-                        </button>
-                    </div>
+            <Header theme={theme} />
+            <div className="flex flex-col items-center justify-center w-full" style={{ width: '100%' }}>
+                <div className="w-full flex flex-col items-center justify-center" style={{ maxWidth: '1200px', width: '80%' }}>
+                    <Logo theme={theme} />
+                    <ThemeToggle theme={theme} setTheme={setTheme} />
+                    {!showResults ? (
+                        <InputSection
+                            theme={theme}
+                            experience={experience}
+                            setExperience={setExperience}
+                            skills={skills}
+                            setSkills={setSkills}
+                            focus={focus}
+                            setFocus={setFocus}
+                            interests={interests}
+                            setInterests={setInterests}
+                            goal={goal}
+                            setGoal={setGoal}
+                            time={time}
+                            setTime={setTime}
+                            features={features}
+                            setFeatures={setFeatures}
+                            avoid={avoid}
+                            setAvoid={setAvoid}
+                            isLoading={isLoading}
+                            handleGenerateIdea={handleGenerateIdea}
+                            formOptions={formOptions}
+                        />
+                    ) : (
+                        <GenerateIdea
+                            theme={theme}
+                            isLoading={isLoading}
+                            error={error}
+                            idea={generatedIdea}
+                            handleGoBack={handleGoBack}
+                        />
+                    )}
                 </div>
             </div>
-            {/* theme end */}
-
-            <Header theme={theme} />
-
             <About theme={theme} />
-
             <Footer theme={theme} />
         </div>
     );

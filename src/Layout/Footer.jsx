@@ -15,21 +15,32 @@ const Linkedin = ({ size = 24 }) => (
     </svg>
 );
 
-const Footer = () => {
+const Footer = ({ theme }) => {
+    // Theme-based color classes
+    const headingClass = theme === 'dark'
+        ? 'text-lg font-semibold mb-3 text-white'
+        : 'text-lg font-semibold mb-3 text-gray-900';
+    const textClass = theme === 'dark'
+        ? 'text-gray-500'
+        : 'text-gray-400';
+    const linkClass = theme === 'dark'
+        ? 'text-indigo-400 hover:text-indigo-200'
+        : 'text-indigo-600 hover:text-indigo-800';
+
     return (
-        <div className="mt-12 border-t border-gray-200 dark:border-gray-700 py-8">
-            <div className="w-[80%] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-8 text-gray-600 dark:text-gray-400">
+        <div className={theme === 'dark' ? 'mt-12 border-t border-gray-700 py-8 bg-gray-900' : 'mt-12 border-t border-gray-200 py-8 bg-gray-50'}>
+            <div className="w-[80%] mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-8">
                 <div>
-                    <h3 className="text-lg font-semibold mb-3  text-gray-900 dark:text-white">About the Developer</h3>
-                    <p className="mb-3">This tool was created by Md. Kamrul Islam, a Bangladeshi tech enthusiastic.</p>
+                    <h3 className={headingClass}>About the Developer</h3>
+                    <p className={`mb-3 ${textClass}`}>This tool was created by Md. Kamrul Islam, a Bangladeshi tech enthusiastic.</p>
                     <div className="flex items-center space-x-4">
-                        <a href="https://github.com/md-kamrul" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"><Github size={24} /></a>
-                        <a href="https://www.linkedin.com/in/iamkamrulislam/" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors"><Linkedin size={24} /></a>
+                        <a href="https://github.com/md-kamrul" target="_blank" rel="noopener noreferrer" className={`hover:text-indigo-500 ${theme === 'dark' ? 'dark:hover:text-indigo-400' : ''} transition-colors`}><Github size={24} /></a>
+                        <a href="https://www.linkedin.com/in/iamkamrulislam/" target="_blank" rel="noopener noreferrer" className={`hover:text-indigo-500 ${theme === 'dark' ? 'dark:hover:text-indigo-400' : ''} transition-colors`}><Linkedin size={24} /></a>
                     </div>
                 </div>
                 <div>
-                    <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Send Feedback</h3>
-                    <p>Have a suggestion or found a bug? Let me know! Just send me an email at <a href="mailto:testmail20027@gmail.com" className="text-indigo-600 dark:text-indigo-400 hover:underline">testmail20027@gmail.com</a>. Thank You.</p>
+                    <h3 className={headingClass}>Send Feedback</h3>
+                    <p className={textClass}>Have a suggestion or found a bug? Let me know! Just send me an email at <a href="mailto:testmail20027@gmail.com" className={linkClass + ' hover:underline'}>testmail20027@gmail.com</a>. Thank You.</p>
                 </div>
             </div>
         </div>

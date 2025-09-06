@@ -15,7 +15,7 @@ const GenerateIdea = (props) => {
         ? 'w-full flex items-center justify-center gap-2 bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-4 focus:ring-gray-800 transition-all duration-300'
         : 'w-full flex items-center justify-center gap-2 bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-300 transition-all duration-300';
     return (
-        <div>
+        <div className='md:w-[90%] mx-auto'>
             <div className={cardClass}>
                 <h2 className={headingClass}>Your Generated Idea</h2>
                 <div className={ideaClass}>

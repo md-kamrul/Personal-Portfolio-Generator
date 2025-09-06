@@ -96,10 +96,10 @@ const Main = () => {
 
     return (
         <div className={theme === 'dark' ? 'bg-gray-900 text-white min-h-screen flex flex-col' : 'bg-gray-50 text-gray-900 min-h-screen flex flex-col'}>
+            <Logo theme={theme} />
             <Header theme={theme} />
             <div className="flex flex-col items-center justify-center w-full" style={{ width: '100%' }}>
                 <div className="w-full flex flex-col items-center justify-center" style={{ maxWidth: '1200px', width: '80%' }}>
-                    <Logo theme={theme} />
                     <ThemeToggle theme={theme} setTheme={setTheme} />
                     {!showResults ? (
                         <InputSection

@@ -48,20 +48,32 @@ const Main = () => {
         setGeneratedIdea('');
         setShowResults(true);
 
-        // Build prompt and call API (replace with your actual API logic)
+        // Build prompt from user inputs
         const prompt = `Act as an expert project idea generator for a developer's portfolio. Based on the following details, generate a single, creative, and well-defined project idea.\n\n**Developer Profile:**\n- **Experience Level:** ${experience}\n- **Technical Skills:** ${skills.join(', ')}\n- **Desired Project Focus:** ${focus}\n- **Personal Interests/Domains:** ${interests.join(', ')}\n- **Primary Goal:** ${goal}\n- **Time Commitment:** ${time}\n- **Key Features Wanted:** ${features}\n- **Technologies/Concepts to Avoid:** ${avoid}`;
 
         try {
-            // Example: Replace with your actual API endpoint and logic
-            const response = await fetch('https://api.example.com/generate-idea', {
-                method: 'POST',
+            const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${import.meta.env.VITE_OPENROUTER_API_KEY}`,
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ prompt }),
+                body: JSON.stringify({
+                    model: "openai/gpt-oss-20b:free",
+                    messages: [
+                        {
+                            role: "user",
+                            content: prompt
+                        }
+                    ]
+                })
             });
             const result = await response.json();
-            setGeneratedIdea(result.idea || '');
+            // Extract idea from OpenRouter response
+            const idea = result.choices && result.choices[0] && result.choices[0].message && result.choices[0].message.content
+                ? result.choices[0].message.content
+                : '';
+            setGeneratedIdea(idea);
         } catch (err) {
             setError('Sorry, something went wrong. Please try again.');
         } finally {
@@ -129,7 +141,7 @@ const Main = () => {
                             theme={theme}
                             isLoading={isLoading}
                             error={error}
-                            idea={generatedIdea}
+                            generatedIdea={generatedIdea}
                             handleGoBack={handleGoBack}
                         />
                     )}
